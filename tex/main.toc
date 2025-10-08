@@ -1,0 +1,12 @@
+\beamer@sectionintoc {1}{Problem and context}{3}{0}{1}
+\beamer@sectionintoc {2}{Objectives of the digital twin}{4}{0}{2}
+\beamer@sectionintoc {3}{Pipeline}{5}{0}{3}
+\beamer@sectionintoc {4}{Methods and models}{6}{0}{4}
+\beamer@subsectionintoc {4}{1}{Reduced-order physics-informed kernels for bearing fatigue}{7}{0}{4}
+\beamer@subsectionintoc {4}{2}{ Physics-informed Neural Network Design for grease Fatigue Estimation}{8}{0}{4}
+\beamer@sectionintoc {5}{Datas}{9}{0}{5}
+\beamer@subsectionintoc {5}{1}{Hypothetical data budget table}{10}{0}{5}
+\beamer@sectionintoc {6}{Verification and validation}{11}{0}{6}
+\beamer@sectionintoc {7}{Transferability and deployment}{12}{0}{7}
+\beamer@sectionintoc {8}{Perspectives and limitations}{13}{0}{8}
+\beamer@sectionintoc {9}{References}{14}{0}{9}

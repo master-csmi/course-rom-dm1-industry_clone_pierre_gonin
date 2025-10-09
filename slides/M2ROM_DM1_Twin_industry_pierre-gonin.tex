@@ -27,7 +27,7 @@
 {
     UFR Maths, Master CSMI \\
 }
-\date{May 28, 2025} % Date, can be changed to a custom date
+\date{October 9, 2025}
 
 %----------------------------------------------------------------------------------------
 %    PRESENTATION SLIDES
@@ -52,17 +52,19 @@
 \end{frame}
 
 %------------------------------------------------
-\section{Problem and context}
+\section{Context}
 %------------------------------------------------
-\begin{frame}{Problem and context}
+\begin{frame}{Context}
+    \subsection{Problems}
+    \textbf{Problems:}
     \begin{itemize}
         \item Bearing fatigue is a major cause of wind turbine failures, leading to significant downtime and repair costs.
         \item As wind turbines are often located in remote or offshore areas, accessing them for maintenance can be challenging and expensive.
     \end{itemize}
-\end{frame}
+    \vfill
 
-\section{Objectives of the digital twin}
-\begin{frame}{Objectives of the digital twin}
+    \subsection{Objectives of the digital twin}
+    \textbf{Objectives of the digital twin:}
     \begin{itemize}
         \item Predict potential failures in wind turbine main bearings.
         \item Optimize maintenance schedules based on real-time data.
@@ -107,8 +109,8 @@
     \end{figure}
 \end{frame}
 
-\subsection{Reduced-order physics-informed kernels for bearing fatigue}
-\begin{frame}{Reduced-order physics-informed kernels for bearing fatigue}
+\subsection{Reduced-order physics-informed kernels for bearing fatigue estimation}
+\begin{frame}{Reduced-order physics-informed kernels for bearing fatigue estimation}
     \begin{align}
     \Delta a_{\mathrm{BRG}}(t)
     &= \frac{1}{c_1\,c_2(t)}\, \left(\frac{P(t)}{C}\right)^{\frac{10}{3}}, \\[4pt]
@@ -120,19 +122,28 @@
     with $a_{\mathrm{BRG}}$ the bearing degradation; $a_{\mathrm{GRS}}$ the grease degradation; $c_1$ a factor based on reliability level; $c_2$ an adjustment factor based on lubricant condition (see Fig. 3b); $P$ the dynamic bearing load (see Fig. 3a); $C$ the design load rating; $\eta_c$ the grease contamination factor; $\nu$ the grease viscosity; $V_W$ the wind speed; $T_{\mathrm{BRG}}$ the bearing temperature; $f_1\ldots f_4(\cdot)$ functions defining the models for different components of the bearing damage.
 \end{frame}
 
-\subsection{ Physics-informed Neural Network Design for grease Fatigue Estimation}
-\begin{frame}{Physics-informed Neural Network Design for grease Fatigue Estimation}
-    Grease degradation is evaluated using a neural network.
+\subsection{Physics-informed Neural Network Design for grease fatigue estimation}
+\begin{frame}{Physics-informed Neural Network Design for grease fatigue estimation}
+    Grease damage increment is evaluated using a neural network:
     \begin{equation}
     \Delta a_{\mathrm{GRS}}(t) \;=\; \mathrm{MLP}\big(V_W(t),\,T_{\mathrm{BRG}}(t),\,a_{\mathrm{GRS}}(t-1);\;\mathbf{w},\,\mathbf{b}\big)
     \end{equation}
+    \vfill
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.2\textwidth]{include/grease_NN.png}
+        \label{fig:grease_NN}
+        \caption{Grease damage increment neural network. \cite{YUCESAN2023110921}}
+    \end{figure}
 \end{frame}
 
 \section{Datas}
 \begin{frame}{Datas}
     \begin{itemize}
-        \item SCADA (supervisory control and data acquisition); available on board; wind speed and bearing temperature; measured every 10 minutes but no history available. $\rightarrow$ Can be used for  online evaluations.
-        \item NREL database: wind speed and ambient temperature every hour for 7 years $\rightarrow$ Can be used for offline Training.
+        \item SCADA (Supervision Control and Data Acquisition); available on board; wind speed and bearing temperature; measured every 10 minutes but no history available. \\ 
+        $\rightarrow$ Can be used for  online evaluations.
+        \item NREL database: wind speed and ambient temperature every hour for 7 years \\
+        $\rightarrow$ Can be used for offline training.
         \item NREL database is used to artificially create SCADA data for 30 simulated years via bootstrapping strategies.
         \item History of grease quality inspection done by humans are available to train the neural network.
     \end{itemize}
@@ -140,40 +151,72 @@
 
 \subsection{Hypothetical data budget table}
 \begin{frame}{Data budget table}
-Hypothetical example for one wind turbine with 4 thermometers and 1 anemometer. Note that 1 anemometer can be used for several wind turbines in a wind farm.
-\vfill 
-\centering
-\small
-\begin{tabular}{l r r r r r l}
-\toprule
-Sensor & \# & Freq. (m/hour) & Size (B/sample) & bitrate (B/hour) & Volume/day (kB) \\
-\midrule
-thermometer  & 4  & 6 & 8       & 192  & 4,608  \\
-anemometer   & 1  & 6 & 8       & 48   & 1,152  \\
-\bottomrule
-\end{tabular}
+
+{\centering 
+\textit{Hypothetical example for one wind turbine with 4 thermometers, 1 anemometer and 1 accelerometer:}
+} \\[10pt]
+{\small
+    \begin{tabular}{l r r r r r l}
+    \toprule
+    Sensor & \# & Freq. (m/hour) & Size (B/sample) & bitrate (B/hour) & Volume/day (kB) \\
+    \midrule
+    thermometer     & 4 & 6 & 8     & 192   & 4,608  \\
+    anemometer      & 1 & 6 & 8     & 48    & 1,152  \\
+    accelerometer   & 1 & 6 & 16    & 96    & 2,304  \\
+    \bottomrule
+    \end{tabular}
+}
+\vfill
+Note that: \\
+\begin{itemize}
+    \item A single anemometer can be used for several wind turbines within a wind farm.
+    \item An accelerometer is employed to measure vibrations near the bearing.
+    \item Sensors for grease quality do exist {\small \textit{(kinetic viscometer, dielectric constant,\dots)}}, but are expensive and difficult to deploy in wind farms 
+\end{itemize}
 \end{frame}
 
-\section{Verification and validation}
-\begin{frame}{Verification and validation}
-
+\section{Validation}
+\begin{frame}{Validation}
+    \begin{columns}[T]
+        % Colonne de texte
+        \begin{column}{0.5\textwidth}
+            \vspace{20pt}
+            Validation has been done by comparing predicted and expected results (from the dataset). \\[10pt]
+            We can see that the model has a good approximation concerning grease damage, especially for longer periods.
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{include/validation.png}
+                \caption{Grease damage prediction for validation wind turbines using one of the best MLP initializations. \cite{YUCESAN2023110921}}
+                \label{fig:validation}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\section{Transferability and deployment}
-\begin{frame}{Transferability and deployment}
 
-\end{frame}
-
-\section{Perspectives and limitations}
-\begin{frame}{Perspectives and limitations}
-
+\section{Limitations}
+\begin{frame}{Limitations}
+    \begin{itemize}
+        \item \textbf{Hard to get data:} \\
+        Measurements are difficult, especially because of the location, and often require humans or expensive sensors.
+        \item \textbf{Human bias:} \\
+        Visual inspections can be wrong or inconsistent.
+        \item \textbf{Grease degradation is complex:} \\ 
+        The real grease degradation process is very complex and computationally expensive, so the model relies on approximations.
+        \item \textbf{Lots of data needed:} \\
+        Many turbines need inspection to get accurate results, which can be expensive.
+    \end{itemize}
 \end{frame}
 
 \section{References}
 \begin{frame}{References}
-\bibliographystyle{plain}
+    \nocite{*}
+    \setbeamertemplate{bibliography item}[text]
+    \bibliographystyle{unsrt}
     \bibliography{biblio}
-    \cite{YUCESAN2023110921}
 \end{frame}
 
 

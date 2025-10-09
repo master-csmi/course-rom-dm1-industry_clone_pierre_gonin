@@ -1,0 +1,36 @@
+# LaTeX temporary and build files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fls
+*.fdb_latexmk
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz
+*.synctex
+*.vrb
+*.dvi
+*.lof
+*.lot
+*.gz
+
+# latexmk files and directories
+.latexmkrc
+/.latexmkrc
+
+# build directories
+out/
+build/
+
+# editor backup files
+*~
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
